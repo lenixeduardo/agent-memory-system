@@ -10,7 +10,7 @@ if(!token||token.length<24)throw new Error('API_TOKEN must have at least 24 char
 const respond=(res,status,body)=>{res.writeHead(status,{'content-type':'application/json; charset=utf-8','cache-control':'no-store'});res.end(JSON.stringify(body));};
 const auth=req=>{const a=Buffer.from(req.headers.authorization||'');const b=Buffer.from('Bearer '+token);return a.length===b.length&&timingSafeEqual(a,b);};
 async function body(req){let s='';for await(const chunk of req){s+=chunk;if(s.length>20000)throw new Error('Body too large');}return JSON.parse(s||'{}');}
-const server=http.createServer(async(req,res)=>{
+export async function handler(req,res){
  const started=Date.now();let status=200;
  try {
   const url=new URL(req.url,'http://localhost');
@@ -25,5 +25,4 @@ const server=http.createServer(async(req,res)=>{
   status=404;return respond(res,404,{error:'Not found'});
  }catch(e){status=400;respond(res,400,{error:redact(e.message)});}
  finally{console.log(JSON.stringify({event:'request',method:req.method,path:req.url?.split('?')[0],status,durationMs:Date.now()-started}));}
-});
-server.listen(Number(process.env.PORT||3000),'127.0.0.1',()=>console.log('Agent Memory API listening'));
+}
