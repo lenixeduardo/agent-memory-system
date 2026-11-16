@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {hash,assertScope,validateTask,redact} from '../src/core.js';
+import {chooseSkills} from '../src/skills.js';
+import {summarizeExperience} from '../src/dream.js';
+test('stable hash',()=>assert.equal(hash('x'),hash('x')));
+test('scope rejects invalid ids',()=>assert.throws(()=>assertScope('../x','p')));
+test('valid task',()=>assert.equal(validateTask({tenantId:'a',projectId:'b',task:'review code'}).task,'review code'));
+test('invalid task rejected',()=>assert.throws(()=>validateTask({tenantId:'a',projectId:'b',task:''})));
+test('select relevant skill',()=>assert.equal(chooseSkills('review code',[{name:'code-review',keywords:'review code'}]).length,1));
+test('dream ignores failed execution',()=>assert.equal(summarizeExperience({success:false,task:'x',outcome:'bad'}),null));
+test('redacts keys',()=>assert.equal(redact('AIza123456789012345678901234567890'),'[REDACTED]'));
