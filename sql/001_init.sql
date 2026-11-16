@@ -1,4 +1,5 @@
-CREATE TABLE IF NOT EXISTS memories (
+CREATE SCHEMA IF NOT EXISTS agent_memory;
+CREATE TABLE IF NOT EXISTS agent_memory.memories (
  id BIGSERIAL PRIMARY KEY,
  tenant_id TEXT NOT NULL,
  project_id TEXT NOT NULL,
@@ -9,8 +10,8 @@ CREATE TABLE IF NOT EXISTS memories (
  created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
  updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX IF NOT EXISTS memories_scope ON memories(tenant_id,project_id,status);
-CREATE TABLE IF NOT EXISTS executions (
+CREATE INDEX IF NOT EXISTS memories_scope ON agent_memory.memories(tenant_id,project_id,status);
+CREATE TABLE IF NOT EXISTS agent_memory.executions (
  id BIGSERIAL PRIMARY KEY,
  tenant_id TEXT NOT NULL,
  project_id TEXT NOT NULL,
@@ -20,4 +21,4 @@ CREATE TABLE IF NOT EXISTS executions (
  duration_ms INTEGER NOT NULL,
  created_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
-CREATE INDEX IF NOT EXISTS executions_scope ON executions(tenant_id,project_id,created_at DESC);
+CREATE INDEX IF NOT EXISTS executions_scope ON agent_memory.executions(tenant_id,project_id,created_at DESC);
