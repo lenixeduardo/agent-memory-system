@@ -15,7 +15,7 @@ test('real PostgreSQL memory lifecycle', {skip:!process.env.RUN_DB_INTEGRATION},
   assert.equal(await updateMemory(tenant,project,inserted.id,hash('Persistent integration test memory'),'Changed content for test'),true);
   assert.equal((await listMemory(tenant,project)).length,0);
  } finally {
-  await pool.query('DELETE FROM memories WHERE tenant_id=$1',[tenant]);
+  await pool.query('DELETE FROM agent_memory.memories WHERE tenant_id=$1',[tenant]);
   await pool.end();
  }
 });
