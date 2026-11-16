@@ -1,6 +1,6 @@
 import pg from 'pg';
 import { assertScope, hash } from './core.js';
-export const pool = new pg.Pool({connectionString:process.env.DATABASE_URL,max:5,connectionTimeoutMillis:5000});
+export const pool = new pg.Pool({connectionString:process.env.DATABASE_URL,max:1,connectionTimeoutMillis:5000,ssl:{rejectUnauthorized:true}});
 export async function listMemory(tenantId,projectId,status='approved') {
  assertScope(tenantId,projectId);
  if(!['approved','pending','rejected'].includes(status)) throw new Error('Invalid status');
