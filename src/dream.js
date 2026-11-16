@@ -6,7 +6,7 @@ export function summarizeExperience(row) {
 }
 export async function dream(tenantId,projectId) {
  assertScope(tenantId,projectId);
- const r=await pool.query('SELECT task,outcome,success FROM executions WHERE tenant_id=$1 AND project_id=$2 ORDER BY id DESC LIMIT 20',[tenantId,projectId]);
+ const r=await pool.query('SELECT task,outcome,success FROM agent_memory.executions WHERE tenant_id=$1 AND project_id=$2 ORDER BY id DESC LIMIT 20',[tenantId,projectId]);
  const proposals=[];
  for(const row of r.rows){const text=summarizeExperience(row);if(text)proposals.push(await proposeMemory(tenantId,projectId,text));}
  return {scanned:r.rowCount,proposals:proposals.filter(p=>!p.duplicate).length,duplicates:proposals.filter(p=>p.duplicate).length};
