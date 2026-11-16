@@ -7,10 +7,10 @@ test('real Gemini via Mastra with PostgreSQL execution log',{skip:!process.env.R
  try {
   const result=await executeTask({tenantId:tenant,projectId:project,task:'Respond with a short greeting in Portuguese.'});
   assert.ok(result.outcome.length>0);
-  const r=await pool.query('SELECT success FROM executions WHERE tenant_id=$1 AND project_id=$2',[tenant,project]);
+  const r=await pool.query('SELECT success FROM agent_memory.executions WHERE tenant_id=$1 AND project_id=$2',[tenant,project]);
   assert.equal(r.rows[0].success,true);
  }finally {
-  await pool.query('DELETE FROM executions WHERE tenant_id=$1',[tenant]);
+  await pool.query('DELETE FROM agent_memory.executions WHERE tenant_id=$1',[tenant]);
   await pool.end();
  }
 });
